@@ -26,4 +26,5 @@ jobs:
       - name: Run
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          USE_OCR: ${{ vars.USE_OCR }}
         run: python main.py

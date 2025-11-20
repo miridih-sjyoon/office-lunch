@@ -1,3 +1,4 @@
+import os
 from enum import Enum, auto
 
 from kakao import get_kakao_plus_friend_profiles, get_kakao_plus_friend_posts
@@ -15,7 +16,7 @@ def ocr(image_url: str):
     return ' '.join(map(lambda x: x[1], text))
 
 
-def get_menu_from_kakao_profile(pf_id: str, use_ocr=False):
+def get_menu_from_kakao_profile(pf_id: str, use_ocr=bool(os.environ.get('USE_OCR'))):
     profile = get_kakao_plus_friend_profiles(pf_id)
     profile_card = filter(lambda x: x.type == 'profile', profile.cards).__next__()
     menu_image_url = profile_card.profile.profile_image.url
