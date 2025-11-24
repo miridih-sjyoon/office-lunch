@@ -1,4 +1,3 @@
-import os
 from enum import Enum, auto
 
 from instagram import get_instagram_web_profile_info
@@ -11,13 +10,6 @@ class MenuSource(Enum):
     KAKAO_PLUS_FRIEND_POST = auto()
 
 
-def ocr(image_url: str):
-    import easyocr
-    reader = easyocr.Reader(['ko'])
-    text = reader.readtext(image_url)
-    return ' '.join(map(lambda x: x[1], text))
-
-
 def get_menu_from_instagram_feed(username: str):
     last_feed = map(lambda x: x.node,
                     get_instagram_web_profile_info(username).user.edge_owner_to_timeline_media.edges).__next__()
@@ -26,15 +18,11 @@ def get_menu_from_instagram_feed(username: str):
     return menu_text + ' ' + menu_image_url
 
 
-def get_menu_from_kakao_profile(pf_id: str, use_ocr=bool(os.environ.get('USE_OCR'))):
+def get_menu_from_kakao_profile(pf_id: str):
     profile = get_kakao_plus_friend_profiles(pf_id)
     profile_card = filter(lambda x: x.type == 'profile', profile.cards).__next__()
     menu_image_url = profile_card.profile.profile_image.url
-    if use_ocr:
-        menu_text = ocr(menu_image_url)
-        return menu_text + ' ' + menu_image_url
-    else:
-        return menu_image_url
+    return menu_image_url
 
 
 def get_menu_from_kakao_post(pf_id: str) -> str:

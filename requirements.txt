@@ -1,3 +1,2 @@
 dacite==1.9.2
-easyocr==1.7.2
 requests==2.32.5
