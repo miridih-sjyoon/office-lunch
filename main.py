@@ -2,7 +2,7 @@ import datetime
 import os
 
 from restaurant import Restaurant
-from slack import send_slack_webhook
+from slack import send_slack_webhook, SlackWebhookPayload
 
 if __name__ == '__main__':
     print(datetime.datetime.now())
@@ -12,7 +12,9 @@ if __name__ == '__main__':
         slack_webhook_url = os.environ.get('SLACK_WEBHOOK_URL')
         if slack_webhook_url:
             send_slack_webhook(
-                username=restaurant.name,
-                text=menu,
+                payload=SlackWebhookPayload(
+                    text=menu,
+                    username=restaurant.name,
+                ),
                 webhook_url=slack_webhook_url,
             )
