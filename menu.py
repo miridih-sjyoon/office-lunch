@@ -17,6 +17,11 @@ class MenuSource(Enum):
     KAKAO_PLUS_FRIEND_POST = auto()
 
 
+class MenuFrequency(Enum):
+    DAILY = auto()
+    WEEKLY = auto()
+
+
 def get_menu_from_instagram_feed(username: str) -> Menu:
     last_feed = map(lambda x: x.node,
                     get_instagram_web_profile_info(username).user.edge_owner_to_timeline_media.edges).__next__()

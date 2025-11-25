@@ -1,12 +1,15 @@
 import datetime
 import os
 
+from menu import MenuFrequency
 from restaurant import Restaurant
 from slack import send_slack_webhook, SlackWebhookPayload
 
 if __name__ == '__main__':
     print(datetime.datetime.now())
     for restaurant in list(Restaurant):
+        if restaurant.menu_frequency == MenuFrequency.WEEKLY and datetime.date.today().weekday() != 0:
+            continue
         menu = restaurant.get_menu()
         print(restaurant.name, menu)
         slack_webhook_url = os.environ.get('SLACK_WEBHOOK_URL')
