@@ -33,8 +33,26 @@ class EdgeOwnerToTimelineMedia:
         @dataclass
         class Node:
             id: str
+            shortcode: str
             display_url: str
+            accessibility_caption: str
             edge_media_to_caption: EdgeMediaToCaption
+            taken_at_timestamp: int
+            thumbnail_resources: list[ThumbnailResource]
+            pinned_for_users: list[PinnedForUser]
+
+            @dataclass
+            class ThumbnailResource:
+                src: str
+                config_width: int
+                config_height: int
+
+            @dataclass
+            class PinnedForUser:
+                id: str
+                is_verified: bool
+                profile_pic_url: str
+                username: str
 
 
 @dataclass
