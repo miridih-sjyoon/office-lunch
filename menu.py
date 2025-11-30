@@ -20,6 +20,7 @@ class MenuSource(Enum):
 
 class MenuFrequency(Enum):
     DAILY = auto()
+    DAILY_LUNCH = auto()
     WEEKLY = auto()
 
 

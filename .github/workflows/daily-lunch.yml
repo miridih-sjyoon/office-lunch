@@ -1,11 +1,11 @@
-name: 이번주 급식 메뉴는 뭔가요?
+name: 오늘 급식 메뉴는 뭔가요? (점심)
 on:
   schedule:
-    - cron: '0 1 ? * MON' # KST 기준 월-금 오전 10시
+    - cron: '30 1 ? * MON-FRI' # KST 기준 월 오전 10시 30분
   workflow_dispatch:
 
 jobs:
-  weekly-menu:
+  daily-lunch-menu:
     runs-on: ubuntu-latest
     steps:
       # 1. 코드 체크아웃
@@ -25,6 +25,6 @@ jobs:
       # 4. 실행
       - name: Run
         env:
-          MENU_FREQUENCY: 'WEEKLY'
+          MENU_FREQUENCY: 'DAILY_LUNCH'
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: python main.py

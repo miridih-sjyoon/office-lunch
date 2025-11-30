@@ -5,9 +5,9 @@ from menu import MenuSource, get_menu_from_kakao_profile, get_menu_from_kakao_po
 
 
 class Restaurant(Enum):
-    알찬푸드_구내식당 = (MenuSource.INSTAGRAM_FEED, 'your_table__', MenuFrequency.DAILY)
+    알찬푸드_구내식당 = (MenuSource.INSTAGRAM_FEED, 'your_table__', MenuFrequency.DAILY_LUNCH)
     알찬푸드_구내식당_주간식단표 = (MenuSource.INSTAGRAM_FEED, 'your_table__', MenuFrequency.WEEKLY)
-    우림_더이룸푸드 = (MenuSource.INSTAGRAM_FEED, 'theirum_food', MenuFrequency.DAILY)
+    우림_더이룸푸드 = (MenuSource.INSTAGRAM_FEED, 'theirum_food', MenuFrequency.DAILY_LUNCH)
     우림_더이룸푸드_식단표 = (MenuSource.INSTAGRAM_FEED, 'theirum_food', MenuFrequency.WEEKLY)
     정원정_한식뷔페 = (MenuSource.KAKAO_PLUS_FRIEND_POST, '_Zlxgxhxj', MenuFrequency.DAILY)
     한신IT타워_구내식당 = (MenuSource.KAKAO_PLUS_FRIEND_PROFILE_IMAGE, '_QRALxb', MenuFrequency.DAILY)
@@ -19,7 +19,7 @@ class Restaurant(Enum):
 
     def get_menu(self):
         if self.menu_source == MenuSource.INSTAGRAM_FEED:
-            if self.menu_frequency == MenuFrequency.DAILY:
+            if self.menu_frequency == MenuFrequency.DAILY or self.menu_frequency == MenuFrequency.DAILY_LUNCH:
                 return get_daily_menu_from_instagram_feed(self.menu_source_id)
             elif self.menu_frequency == MenuFrequency.WEEKLY:
                 return get_weekly_menu_from_instagram_feed(self.menu_source_id)
