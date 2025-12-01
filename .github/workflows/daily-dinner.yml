@@ -1,0 +1,12 @@
+name: 오늘 급식 메뉴는 뭔가요? (저녁)
+on:
+  schedule:
+    - cron: '30 8 ? * MON-FRI' # KST 기준 월 오후 5시 30분
+  workflow_dispatch:
+
+jobs:
+  daily-dinner-menu:
+    uses: ./.github/workflows/get-menu.yml
+    with:
+      MENU_FREQUENCY: 'DAILY_DINNER'
+    secrets: inherit
