@@ -30,12 +30,12 @@ class MenuNotFoundException(Exception):
 
 
 def get_daily_menu_from_instagram_feed(username: str) -> Menu:
-    last_feed = sorted(map(lambda x: x.node,
-                           get_instagram_web_profile_info(username).user.edge_owner_to_timeline_media.edges),
+    last_feed = sorted(filter(lambda x: not x.pinned_for_users,
+                              map(lambda x: x.node,
+                                  get_instagram_web_profile_info(username).user.edge_owner_to_timeline_media.edges)),
                        key=lambda x: x.taken_at_timestamp, reverse=True)[0]
     taken_at_timestamp = datetime.datetime.fromtimestamp(last_feed.taken_at_timestamp)
     if datetime.datetime.now() - taken_at_timestamp > datetime.timedelta(hours=6):
-        print(taken_at_timestamp)
         raise MenuNotFoundException('Not found instagram feed')
     menu_text = map(lambda x: x.node, last_feed.edge_media_to_caption.edges).__next__().text
     menu_image_url = last_feed.display_url
@@ -46,8 +46,9 @@ def get_daily_menu_from_instagram_feed(username: str) -> Menu:
 
 
 def get_weekly_menu_from_instagram_feed(username: str) -> Menu:
-    last_feed = map(lambda x: x.node,
-                    get_instagram_web_profile_info(username).user.edge_owner_to_timeline_media.edges).__next__()
+    last_feed = filter(lambda x: x.pinned_for_users,
+                       map(lambda x: x.node,
+                           get_instagram_web_profile_info(username).user.edge_owner_to_timeline_media.edges)).__next__()
     taken_at_timestamp = datetime.datetime.fromtimestamp(last_feed.taken_at_timestamp)
     if datetime.datetime.now() - taken_at_timestamp > datetime.timedelta(weeks=1):
         print(taken_at_timestamp)
