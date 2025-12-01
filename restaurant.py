@@ -1,7 +1,7 @@
 from enum import Enum
 
 from menu import MenuSource, get_menu_from_kakao_profile, get_menu_from_kakao_post, MenuFrequency, \
-    get_daily_menu_from_instagram_feed, get_weekly_menu_from_instagram_feed
+    get_daily_menu_from_instagram_feed, get_weekly_menu_from_instagram_feed, Menu
 
 
 class Restaurant(Enum):
@@ -19,14 +19,20 @@ class Restaurant(Enum):
         self.menu_source_id = menu_source_id
         self.menu_frequency = menu_frequency
 
-    def get_menu(self):
-        if self.menu_source == MenuSource.INSTAGRAM_FEED:
-            if self.menu_frequency == MenuFrequency.DAILY or self.menu_frequency == MenuFrequency.DAILY_LUNCH or self.menu_frequency == MenuFrequency.DAILY_DINNER:
-                return get_daily_menu_from_instagram_feed(self.menu_source_id)
-            elif self.menu_frequency == MenuFrequency.WEEKLY:
-                return get_weekly_menu_from_instagram_feed(self.menu_source_id)
-        elif self.menu_source == MenuSource.KAKAO_PLUS_FRIEND_PROFILE_IMAGE:
-            return get_menu_from_kakao_profile(self.menu_source_id)
-        elif self.menu_source == MenuSource.KAKAO_PLUS_FRIEND_POST:
-            return get_menu_from_kakao_post(self.menu_source_id)
-        raise Exception(f'Unknown menu source {self.menu_source}')
+    def get_menu(self) -> Menu:
+        try:
+            if self.menu_source == MenuSource.INSTAGRAM_FEED:
+                if self.menu_frequency in (MenuFrequency.DAILY, MenuFrequency.DAILY_LUNCH, MenuFrequency.DAILY_DINNER):
+                    return get_daily_menu_from_instagram_feed(self.menu_source_id)
+                elif self.menu_frequency == MenuFrequency.WEEKLY:
+                    return get_weekly_menu_from_instagram_feed(self.menu_source_id)
+            elif self.menu_source == MenuSource.KAKAO_PLUS_FRIEND_PROFILE_IMAGE:
+                return get_menu_from_kakao_profile(self.menu_source_id)
+            elif self.menu_source == MenuSource.KAKAO_PLUS_FRIEND_POST:
+                return get_menu_from_kakao_post(self.menu_source_id)
+            raise Exception(f'Unknown menu source {self.menu_source}')
+        except Exception as e:
+            return Menu(
+                text=str(e),
+                image_url=None,
+            )
